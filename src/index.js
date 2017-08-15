@@ -30,8 +30,6 @@ class TodoList extends React.Component {
 	}
 
 	removeItem(key) {
-		console.log("removing item" + key);
-
 		var itemArray = this.state.items;
 
 		var index = itemArray.findIndex(p => p && (p.key === key));
