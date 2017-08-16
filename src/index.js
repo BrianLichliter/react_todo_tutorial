@@ -1,42 +1,55 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 import './index.css';
 
 class TodoList extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {items: []}
+		this.state = { items: [] }
 		this.removeItem = this.removeItem.bind(this)
+		this.loadTodosFromServer = this.loadTodosFromServer.bind(this)
+		this.componentDidMount = this.componentDidMount.bind(this)
+	}
+
+	loadTodosFromServer() {
+		axios.get(this.props.url)	
+		.then(res => {
+			this.setState({ items: res.data });
+		})
+	}
+
+	componentDidMount() {
+		this.loadTodosFromServer();
+		setInterval(this.loadTodosFromServer, this.props.pollInterval);
 	}
 
 	addItem(e) {
 		e.preventDefault();		
-		
-		var itemArray = this.state.items;
 
-		itemArray.push(
-			{
-				text: this._inputElement.value,
-				key: Date.now()
-			}
-		);
+		var todo = ({ text: this._inputElement.value });
 
-		this.setState({
-			items: itemArray
-		});
+		axios.post(this.props.url, todo)
+		.then(res => {
+			this.setState({ items: res.data })
+		})
+		.catch(err => {
+			console.error(err);
+		})
 
 		this._inputElement.value = "";
 	}
 
-	removeItem(key) {
-		var itemArray = this.state.items;
-
-		var index = itemArray.findIndex(p => p && (p.key === key));
-
-		delete(itemArray[index]);
-
-		this.setState({items: itemArray});
+	removeItem(id) {
+		axios.delete(this.props.url+"/"+id)
+		.then(res => {
+			this.setState({ items: res.data })
+			console.log("delete successful")
+		})
+		.catch(err => {
+			console.error(err);
+		});
 	}
 
 	render() {
@@ -65,7 +78,7 @@ class TodoItems extends React.Component {
 	}
 
 	createTasks(item) {
-		return <li onClick={() => this.props.removeItem(item.key)} key={item.key}> {item.text} </li>;
+		return <li onClick={() => this.props.removeItem(item._id)} key={item._id}> {item.text} </li>;
 	}
 
 	render() {
@@ -82,6 +95,6 @@ class TodoItems extends React.Component {
 }
 
 ReactDOM.render(
-	<TodoList/>,
+	<TodoList url="http://localhost:3001/api/todos" pollInterval={2000} />,
 	document.querySelector("#container")
 );
