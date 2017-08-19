@@ -1,15 +1,23 @@
-//model/comments.js
-'use strict';
-//import dependency
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-//create new instance of the mongoose.schema. the schema takes an object that shows
-//the shape of your database entries.
-var TodosSchema = new Schema({
-  key: Number,
-  text: String
+//import dependency 
+var knex = require('knex')({
+  client: 'pg',
+  version: '9.6',
+  connection: {
+    host : '127.0.0.1',
+    user : 'bal',
+    password : '',
+    database : 'bal'
+  }
 });
 
-//export our module to use in server.js
-module.exports = mongoose.model('Todo', TodosSchema);
+console.log('Creating todos table');
+
+//if the table hasn't been created yet then create it
+knex.schema.createTableIfNotExists('todos', function (table) {
+  table.increments();
+  table.string('text');
+  table.timestamps();
+  console.log('Todos table created');
+}).catch(function(error) {
+  console.err(error);
+});

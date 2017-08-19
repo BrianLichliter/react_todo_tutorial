@@ -78,7 +78,7 @@ class TodoItems extends React.Component {
 	}
 
 	createTasks(item) {
-		return <li onClick={() => this.props.removeItem(item._id)} key={item._id}> {item.text} </li>;
+		return <li onClick={() => this.props.removeItem(item.id)} key={item.id}> {item.text} </li>;
 	}
 
 	render() {
