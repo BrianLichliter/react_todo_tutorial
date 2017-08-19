@@ -1,21 +1,15 @@
 //model/comments.js
 'use strict';
-
 //import dependency
-var pg = require('pg');
-var knex = require('knex')({
-  client: 'pg',
-  connection: {
-    host : '127.0.0.1',
-    user : 'lichliterb',
-    password : '',
-    database : 'lichliterb'
-  }
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
+//create new instance of the mongoose.schema. the schema takes an object that shows
+//the shape of your database entries.
+var TodosSchema = new Schema({
+  key: Number,
+  text: String
 });
 
-//create new table with columns we need.
-knex.schema.createTable('todos', function (table) {
-  table.increments();
-  table.string('text');
-  table.timestamps();
-});
+//export our module to use in server.js
+module.exports = mongoose.model('Todo', TodosSchema);
