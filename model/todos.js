@@ -1,12 +1,11 @@
 //import dependency 
 var knex = require('knex')({
   client: 'pg',
-  version: '9.6',
   connection: {
-    host : '127.0.0.1',
-    user : 'bal',
-    password : '',
-    database : 'bal'
+    host : process.env.HOST || '127.0.0.1',
+    user : process.env.USER || 'bal',
+    password : process.env.PASSWORD || '',
+    database : process.env.DATABASE || 'bal'
   }
 });
 
