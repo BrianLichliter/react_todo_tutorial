@@ -5,7 +5,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var Todo = require('./model/todos');
-//import dependency 
 var knex = require('knex')({
   client: 'pg',
   connection: process.env.DATABASE_URL || {
@@ -60,7 +59,13 @@ router.route('/todos')
 .post(function(req, res) {
   knex('todos').insert({text: req.body.text})
   .then(function(rows) {
-    res.json({message: 'Insert successful'});
+    var todos = knex.select().from('todos')
+    .then(function(rows) {
+      res.json(rows);
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
   })
   .catch(function(error) {
     res.status(500).send('Something broke!');    
@@ -71,7 +76,13 @@ router.route('/todos')
 router.route('/todos/:id').delete(function(req, res) {
   knex('todos').where({id: req.params.id}).delete()
   .then(function(rows) {
-    res.json({message: 'Delete successful'});
+    var todos = knex.select().from('todos')
+    .then(function(rows) {
+      res.json(rows);
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
   })
   .catch(function(error) {
     res.status(500).send('Something broke!');    

@@ -45,7 +45,6 @@ class TodoList extends React.Component {
 		axios.delete(this.props.url+"/"+id)
 		.then(res => {
 			this.setState({ items: res.data })
-			console.log("delete successful")
 		})
 		.catch(err => {
 			console.error(err);
@@ -83,8 +82,13 @@ class TodoItems extends React.Component {
 
 	render() {
 		var todoEntries = this.props.entries;
-
-		var listItems = todoEntries.map(this.createTasks);
+		try {
+			var listItems = todoEntries.map(this.createTasks);
+		} 
+		catch(e) {
+			console.log(e);
+			console.log(todoEntries);
+		}
 
 		return (
 			<ul className="theList">
