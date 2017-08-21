@@ -5,15 +5,12 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var Todo = require('./model/todos');
-var knex = require('knex')({
-  client: 'pg',
-  connection: process.env.DATABASE_URL || {
-    host : '127.0.0.1',
-    user : 'bal',
-    password : '',
-    database : 'bal'
-  }
+knex = require('knex')({ 
+  client: 'pg', 
+  connection: process.env.DATABASE_URL 
 });
+
+console.log(process.env.DATABASE_URL);
 
 //and create our instances
 var app = express();
