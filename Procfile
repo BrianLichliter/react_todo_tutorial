@@ -1,2 +1,2 @@
-web: react-scripts start
+web: serve -s build
 api: nodemon server.js
