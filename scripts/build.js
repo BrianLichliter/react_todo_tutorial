@@ -4,6 +4,14 @@
 process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
 
+// Find out what are our host is
+var database_url = process.env.DATABASE_URL;
+database_url = "dbname=d41i9n7606arra host=ec2-184-73-199-72.compute-1.amazonaws.com port=5432 user=soauqyrsdlhsod password=bdfeefe3039b7274b74529b7bb6948a30f0cd85bf90a9645b3036d85b9bcd85b sslmode=require";
+if (database_url) {
+  var host = /host=([a-z0-9-.]*)/.exec(database_url)[1];
+  console.log(host);
+}
+
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
@@ -25,6 +33,7 @@ const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 const printBuildError = require('react-dev-utils/printBuildError');
+const replace = require('replace-in-file');
 
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
@@ -54,6 +63,9 @@ measureFileSizesBeforeBuild(paths.appBuild)
   })
   .then(
     ({ stats, previousFileSizes, warnings }) => {
+      if (host) {
+        replaceAPIUrl();
+      }
       if (warnings.length) {
         console.log(chalk.yellow('Compiled with warnings.\n'));
         console.log(warnings.join('\n\n'));
@@ -147,4 +159,29 @@ function copyPublicFolder() {
     dereference: true,
     filter: file => file !== paths.appHtml,
   });
+}
+
+function replaceAPIUrl() {
+  const options = {
+    
+     //File to change
+     files: [
+       'build/static/js/main*'
+     ],
+    
+     //Replacement to make (string or regex)
+     from: 'http://localhost:3001/api/todos',
+     to: host,
+   
+     //Character encoding for reading/writing files (defaults to utf-8)
+     encoding: 'utf8',
+   };
+
+  try {
+    const changedFiles = replace.sync(options);
+    console.log('Modified files:', changedFiles.join(', '));
+  }
+  catch (error) {
+    console.error('Error occurred:', error);
+  }
 }
