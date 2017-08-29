@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var Todo = require('./model/todos');
 knex = require('knex')({ 
   client: 'pg', 
-  connection: process.env.DATABASE_URL 
+  connection: process.env.DATABASE_URL + '?ssl=true' 
 });
 
 console.log(process.env.DATABASE_URL);

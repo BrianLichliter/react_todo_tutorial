@@ -1,6 +1,6 @@
 knex = require('knex')({ 
   client: 'pg', 
-  connection: process.env.DATABASE_URL 
+  connection: process.env.DATABASE_URL + '?ssl=true'
 });
 
 //if the table hasn't been created yet then create it
