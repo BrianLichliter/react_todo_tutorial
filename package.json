@@ -56,7 +56,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "start-dev": "nf start -p 3000",
-    "build": "node scripts/build.js",
+    "build": "DATABASE_URL=$(heroku config:get DATABASE_URL -a calm-dusk-59772) node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "postinstall": "node scripts/build.js"
   },

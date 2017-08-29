@@ -1,2 +1,2 @@
-web: serve -s build
-api: nodemon server.js
+web: DATABASE_URL=$(heroku config:get DATABASE_URL -a calm-dusk-59772) serve -s build
+api: DATABASE_URL=$(heroku config:get DATABASE_URL -a calm-dusk-59772) nodemon server.js

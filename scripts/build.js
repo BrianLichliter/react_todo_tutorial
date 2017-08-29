@@ -6,9 +6,10 @@ process.env.NODE_ENV = 'production';
 
 // Find out what are our host is
 var database_url = process.env.DATABASE_URL;
-database_url = "dbname=d41i9n7606arra host=ec2-184-73-199-72.compute-1.amazonaws.com port=5432 user=soauqyrsdlhsod password=bdfeefe3039b7274b74529b7bb6948a30f0cd85bf90a9645b3036d85b9bcd85b sslmode=require";
+console.log(database_url);
 if (database_url) {
-  var host = /host=([a-z0-9-.]*)/.exec(database_url)[1];
+  // var host = /host=([a-z0-9-.]*)/.exec(database_url)[1];
+  var host = /@([a-z0-9-.]*):/.exec(database_url)[1];
   console.log(host);
 }
 
